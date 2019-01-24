@@ -14,7 +14,7 @@ class App extends Component {
   }
 
   visitPage = () => {
-    window.location='http://localhost:3000/users';
+    window.location='http://localhost:3000/jokes';
   }
 
   render() {
@@ -28,7 +28,7 @@ class App extends Component {
         <Route path="/" exact render={props => <h2>Hello from the Home Page</h2>} />
 
         <Route 
-          path="/users" 
+          path="/jokes" 
           render={props => <JokesList /> } /> 
 
         <Route 

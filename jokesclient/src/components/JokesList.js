@@ -31,10 +31,11 @@ class JokesList extends Component {
       }
       const res = await axios.get(endpoint, options);
       const { data } = await res;
-      console.log(data)
+      console.log(res.data.value);
       this.setState({
-        jokes: res.data.value.joke
+        jokes: res.data.value
       })
+      console.log('State', this.state);
     }
     catch (err) {
       console.error('ERR', err)
@@ -45,8 +46,8 @@ class JokesList extends Component {
     return (
       <JokesWrapper >
           <ListGroup>
-            {this.state.jokes.map (joke => <ListGroupItem key={joke.value.id}>{joke.value.joke}</ListGroupItem>)}
-          </ListGroup>;
+          <ListGroupItem>{this.state.jokes.joke}</ListGroupItem>
+          </ListGroup>
       </JokesWrapper>
     );
   }
