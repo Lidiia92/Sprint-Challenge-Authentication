@@ -7,7 +7,7 @@ const db = require('../database/dbConfig.js');
 module.exports = server => {
   server.post('/api/register', register);
   server.post('/api/login', login);
-  server.get('/api/jokes', helpers.protected, getJokes);
+  server.get('/api/jokes', authenticate, getJokes);
   //Test
   server.get('/', (req, res) => {
     res.send('Testing testing 1 2 3');
@@ -61,24 +61,31 @@ async function login(req, res) {
   }
 }
 
-async function getJokes(req, res) {
-  try {
-    const endpoint = 'http://api.icndb.com/jokes/random/';
-    const response = await axios.get(endpoint);
-    const { data } = await response;
-    console.log(data);
-    res.status(200).json(response.data);
-  }
-  catch (err){
-    res.status(500).json({ message: 'Error Fetching Jokes', error: err });
-  }
-}
+// async function getJokes(req, res) {
+//   try {
+//     const endpoint = 'http://api.icndb.com/jokes/random/';
+//     const response = await axios.get(endpoint);
+//     const { data } = await response;
+//     console.log(data);
+//     res.status(200).json(response.data);
+//   }
+//   catch (err){
+//     res.status(500).json({ message: 'Error Fetching Jokes', error: err });
+//   }
+// }
 
-// axios
-// .get('https://safe-falls-22549.herokuapp.com/random_ten')
-// .then(response => {
-//   res.status(200).json(response.data);
-// })
-// .catch(err => {
-//   res.status(500).json({ message: 'Error Fetching Jokes', error: err });
-// });
+
+function getJokes(req, res) {
+  const requestOptions = {
+    headers: { accept: 'application/json' },
+  };
+
+  axios
+    .get('https://icanhazdadjoke.com/search', requestOptions)
+    .then(response => {
+      res.status(200).json(response.data.results);
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'Error Fetching Jokes', error: err });
+    });
+}
